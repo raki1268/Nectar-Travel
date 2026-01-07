@@ -1,0 +1,183 @@
+{
+  "homepage": {
+    "heroSlides": [
+      {
+        "image": "/images/hero/slide-1.jpg",
+        "title": "Curated for the \n Modern Soul",
+        "subtitle": "Global Luxury Collection"
+      },
+      {
+        "image": "/images/hero/slide-2.jpg",
+        "title": "Silence of the \n Alps",
+        "subtitle": "Exclusive Swiss Retreats"
+      },
+      {
+        "image": "/images/hero/slide-3.jpg",
+        "title": "Rhythms of \n Africa",
+        "subtitle": "Private Safari Expeditions"
+      }
+    ],
+    "curatorsPick": {
+      "title": "Curator's Pick",
+      "subtitle": "Handselected experiences for discerning travelers"
+    },
+    "aboutSection": {
+      "title": "About Nectar Travel",
+      "subtitle": "Est. 2024",
+      "description": "We do not sell tickets; we grant keys to the hidden doors of the world."
+    }
+  },
+  "cruise": {
+    "title": "Luxury on the Seas",
+    "subtitle": "Nectar Travel Cruise Collection",
+    "heroImage": "/images/cruise/hero.jpg",
+    "routes": [
+      {
+        "title": "Royal Suite Class",
+        "type": "High-End",
+        "image": "/images/cruise/royal-suite.jpg",
+        "description": "Experience ultimate luxury at sea"
+      },
+      {
+        "title": "Danube River Cruise",
+        "type": "Editor Pick",
+        "image": "/images/cruise/danube.jpg",
+        "description": "Journey through European heritage"
+      },
+      {
+        "title": "Family Ocean Adventure",
+        "type": "First Time",
+        "image": "/images/cruise/family.jpg",
+        "description": "Perfect introduction to cruising"
+      }
+    ],
+    "partners": [
+      "Silversea",
+      "Viking",
+      "Royal Caribbean",
+      "Seabourn",
+      "Regent Seven Seas",
+      "Norwegian",
+      "Cunard"
+    ],
+    "articles": [
+      {
+        "title": "Why River Cruising is the New Luxury",
+        "date": "OCT 24"
+      },
+      {
+        "title": "A Guide to Antarctica Expeditions",
+        "date": "NOV 02"
+      }
+    ]
+  },
+  "ticket": {
+    "title": "Your Pass to Wonder",
+    "subtitle": "Global Access & Exclusive Entry",
+    "heroImage": "/images/ticket/hero.jpg",
+    "routes": [
+      {
+        "title": "Theme Park VIP Access",
+        "type": "Theme Parks",
+        "image": "/images/ticket/theme-park.jpg",
+        "description": "Skip lines at world-class attractions"
+      },
+      {
+        "title": "Japan Rail Pass & Shinkansen",
+        "type": "Transport",
+        "image": "/images/ticket/japan-rail.jpg",
+        "description": "Unlimited bullet train travel"
+      },
+      {
+        "title": "Seasonal Flower Festivals",
+        "type": "Limited Time",
+        "image": "/images/ticket/flowers.jpg",
+        "description": "Exclusive festival access"
+      }
+    ],
+    "partners": [
+      "Universal Studios",
+      "Disney Resorts",
+      "JR Group",
+      "Swiss Travel System",
+      "TeamLab",
+      "Louvre"
+    ],
+    "articles": [
+      {
+        "title": "Ultimate Guide to Japan Rail Pass 2025",
+        "date": "DEC 01"
+      },
+      {
+        "title": "Skip the Line: Paris Museum Tips",
+        "date": "DEC 10"
+      }
+    ]
+  },
+  "about": {
+    "title": "The Art of Travel",
+    "subtitle": "EST. 2024",
+    "philosophy": {
+      "title": "Our Philosophy",
+      "content": "Nectar Travel was born from a simple idea: travel should not just be movement, but a movement of the soul.",
+      "image": "/images/about/philosophy.jpg"
+    }
+  },
+  "footer": {
+    "description": "Curating exceptional journeys for the modern voyager. We blend art, nature, and luxury into unforgettable experiences.",
+    "copyright": "COPYRIGHT © NECTAR TRAVEL. All Rights Reserved.",
+    "company": {
+      "title": "Company",
+      "links": [
+        { "label": "About Us", "action": "about" },
+        { "label": "Careers", "action": "careers" }
+      ]
+    },
+    "support": {
+      "title": "Support",
+      "links": [
+        { "label": "Contact", "action": "contact" },
+        { "label": "FAQ", "action": "faq" }
+      ]
+    }
+  },
+  "modals": {
+    "safety": {
+      "title": "Safety Info",
+      "content": [
+        {
+          "label": "Emergency",
+          "description": "24/7 Global Support."
+        },
+        {
+          "label": "Health",
+          "description": "WHO guideline adherence."
+        }
+      ]
+    },
+    "membership": {
+      "title": "The Inner Circle",
+      "subtitle": "Join Nectar Travel Membership",
+      "description": "Unlock a world of privileges reserved for our most discerning travelers.",
+      "benefits": [
+        {
+          "title": "Welcome Gift",
+          "description": "Enjoy 10% OFF your first bespoke journey."
+        },
+        {
+          "title": "Priority Access",
+          "description": "Be the first to know about limited-edition routes and seasonal festivals."
+        },
+        {
+          "title": "Concierge Service",
+          "description": "Complimentary travel consultation with our senior architects of experience."
+        },
+        {
+          "title": "Private Events",
+          "description": "Invitations to exclusive art viewings and wine tastings."
+        }
+      ],
+      "footnote": "Membership is complimentary. Your journey begins with a single step."
+    }
+  }
+}
