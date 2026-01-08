@@ -1,0 +1,54 @@
+{
+  "season": [
+    {
+      "id": "spring",
+      "name": "Spring",
+      "image": "/images/categories/spring.jpg",
+      "description": "Blossom season adventures"
+    },
+    {
+      "id": "summer",
+      "name": "Summer",
+      "image": "/images/categories/summer.jpg",
+      "description": "Sun-soaked explorations"
+    },
+    {
+      "id": "autumn",
+      "name": "Autumn",
+      "image": "/images/categories/autumn.jpg",
+      "description": "Golden harvest journeys"
+    },
+    {
+      "id": "winter",
+      "name": "Winter",
+      "image": "/images/categories/winter.jpg",
+      "description": "Snow-covered escapes"
+    }
+  ],
+  "destination": [
+    {
+      "id": "japan",
+      "name": "Japan",
+      "image": "/images/categories/japan.jpg",
+      "description": "Ancient traditions meet modern elegance"
+    },
+    {
+      "id": "europe",
+      "name": "Europe",
+      "image": "/images/categories/europe.jpg",
+      "description": "Historic cities and cultural treasures"
+    },
+    {
+      "id": "canada",
+      "name": "Canada",
+      "image": "/images/categories/canada.jpg",
+      "description": "Wilderness and natural wonders"
+    },
+    {
+      "id": "usa",
+      "name": "USA",
+      "image": "/images/categories/usa.jpg",
+      "description": "Diverse landscapes and urban adventures"
+    }
+  ]
+}
