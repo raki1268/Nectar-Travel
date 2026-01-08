@@ -1,7 +1,7 @@
 import React from 'react';
 import { Instagram, Facebook, Mail } from 'lucide-react';
 import contentData from '../../data/content.json';
-import { siteConfig } from '../../config/siteConfig';
+import { siteConfig } from '../../src/config/siteConfig';
 
 const Footer = ({ theme, onNavigate }) => {
   const footerContent = contentData.footer;
