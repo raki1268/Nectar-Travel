@@ -1,0 +1,45 @@
+{
+  "tours": [
+    {
+      "id": 1,
+      "title": "Canada Aurora Expedition",
+      "price": 6999,
+      "currency": "CNY",
+      "image": "/images/tours/canada-aurora.jpg",
+      "days": 7,
+      "category": "Canada",
+      "season": "Winter",
+      "description": "Witness the celestial dance of the Northern Lights from our exclusive glass-domed lodges.",
+      "status": "active",
+      "featured": true,
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Check-in",
+          "description": "Private transfer to Fairmont. Evening cocktail reception."
+        },
+        {
+          "day": 2,
+          "title": "Scenic Train Journey",
+          "description": "Rocky Mountaineer luxury class to Banff National Park."
+        },
+        {
+          "day": 3,
+          "title": "Lake Louise Expedition",
+          "description": "Private guided tour of the glaciers and afternoon tea."
+        },
+        {
+          "day": 4,
+          "title": "Aurora Hunting",
+          "description": "Exclusive viewing spot with heated domes and chef-prepared dinner."
+        }
+      ],
+      "highlights": [
+        "Private glass-domed aurora lodges",
+        "Rocky Mountaineer luxury train",
+        "Professional aurora photography session",
+        "Gourmet chef-prepared meals"
+      ]
+    }
+  ]
+}

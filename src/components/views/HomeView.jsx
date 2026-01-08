@@ -3,7 +3,7 @@ import { ArrowRight, Anchor, Palette, Ticket, Users, Tent } from 'lucide-react';
 import HoverImageCard from '../common/HoverImageCard';
 import contentData from '../../data/content.json';
 import toursData from '../../data/tours.json';
-import { siteConfig } from '../../src/config/siteConfig';
+import { siteConfig } from '../../config/siteConfig';
 
 const HomeView = ({ theme, onNavigate, onTourSelect }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
