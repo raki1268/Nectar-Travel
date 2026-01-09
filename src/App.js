@@ -136,10 +136,8 @@ const App = () => {
   };
 
   return (
-  <div className={`font-sans ...`}>
-    {/* 临时添加这一行 */}
-    <h1 style={{color: 'red', fontSize: '100px', position: 'fixed', zIndex: 9999}}>HELLO TEST</h1>
-      <GlobalStyles />
+    <div className={`font-sans selection:bg-gray-300 selection:text-black ${theme.bg} transition-colors duration-500`}>
+      {/* Global Styles */}
 
       {/* Header */}
       <Header 
