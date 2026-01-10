@@ -2,17 +2,17 @@
   "homepage": {
     "heroSlides": [
       {
-        "image": "/images/hero/slide-1.jpg",
+        "image": "public/images/hero/slide-1.jpg",
         "title": "Curated for the \n Modern Soul",
         "subtitle": "Global Luxury Collection"
       },
       {
-        "image": "/images/hero/slide-2.jpg",
+        "image": "public/images/hero/slide-2.jpg",
         "title": "Silence of the \n Alps",
         "subtitle": "Exclusive Swiss Retreats"
       },
       {
-        "image": "/images/hero/slide-3.jpg",
+        "image": "public/images/hero/slide-3.jpg",
         "title": "Rhythms of \n Africa",
         "subtitle": "Private Safari Expeditions"
       }
