@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Nectar-Travel/static/css/main.32043262.css",
-    "main.js": "/Nectar-Travel/static/js/main.09079093.js",
+    "main.js": "/Nectar-Travel/static/js/main.1fdb77c6.js",
     "index.html": "/Nectar-Travel/index.html",
     "main.32043262.css.map": "/Nectar-Travel/static/css/main.32043262.css.map",
-    "main.09079093.js.map": "/Nectar-Travel/static/js/main.09079093.js.map"
+    "main.1fdb77c6.js.map": "/Nectar-Travel/static/js/main.1fdb77c6.js.map"
   },
   "entrypoints": [
     "static/css/main.32043262.css",
-    "static/js/main.09079093.js"
+    "static/js/main.1fdb77c6.js"
   ]
 }
