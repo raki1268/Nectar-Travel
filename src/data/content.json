@@ -1,4 +1,5 @@
 {
+  "_comment": "首页轮播图配置",
   "homepage": {
     "heroSlides": [
       {
@@ -13,6 +14,11 @@
       },
       {
         "image": "images/hero/slide-3.jpg",
+        "title": "Rhythms of \n Africa",
+        "subtitle": "Private Safari Expeditions"
+      },
+      {
+        "image": "images/hero/slide-4.jpg",
         "title": "Rhythms of \n Africa",
         "subtitle": "Private Safari Expeditions"
       }
@@ -30,24 +36,24 @@
   "cruise": {
     "title": "Luxury on the Seas",
     "subtitle": "Nectar Travel Cruise Collection",
-    "heroImage": "/images/cruise/hero.jpg",
+    "heroImage": "images/cruise/hero.jpg",
     "routes": [
       {
         "title": "Royal Suite Class",
         "type": "High-End",
-        "image": "/images/cruise/royal-suite.jpg",
+        "image": "images/cruise/royal-suite.jpg",
         "description": "Experience ultimate luxury at sea"
       },
       {
         "title": "Danube River Cruise",
         "type": "Editor Pick",
-        "image": "/images/cruise/danube.jpg",
+        "image": "images/cruise/danube.jpg",
         "description": "Journey through European heritage"
       },
       {
         "title": "Family Ocean Adventure",
         "type": "First Time",
-        "image": "/images/cruise/family.jpg",
+        "image": "images/cruise/family.jpg",
         "description": "Perfect introduction to cruising"
       }
     ],
@@ -74,24 +80,24 @@
   "ticket": {
     "title": "Your Pass to Wonder",
     "subtitle": "Global Access & Exclusive Entry",
-    "heroImage": "/images/ticket/hero.jpg",
+    "heroImage": "images/ticket/hero.jpg",
     "routes": [
       {
         "title": "Theme Park VIP Access",
         "type": "Theme Parks",
-        "image": "/images/ticket/theme-park.jpg",
+        "image": "images/ticket/theme-park.jpg",
         "description": "Skip lines at world-class attractions"
       },
       {
         "title": "Japan Rail Pass & Shinkansen",
         "type": "Transport",
-        "image": "/images/ticket/japan-rail.jpg",
+        "image": "images/ticket/japan-rail.jpg",
         "description": "Unlimited bullet train travel"
       },
       {
         "title": "Seasonal Flower Festivals",
         "type": "Limited Time",
-        "image": "/images/ticket/flowers.jpg",
+        "image": "images/ticket/flowers.jpg",
         "description": "Exclusive festival access"
       }
     ],
@@ -120,7 +126,7 @@
     "philosophy": {
       "title": "Our Philosophy",
       "content": "Nectar Travel was born from a simple idea: travel should not just be movement, but a movement of the soul.",
-      "image": "/images/about/philosophy.jpg"
+      "image": "images/about/philosophy.jpg"
     }
   },
   "footer": {

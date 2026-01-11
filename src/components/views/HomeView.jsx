@@ -3,32 +3,38 @@ import { ArrowRight, Anchor, Palette, Ticket, Users, Tent } from 'lucide-react';
 import HoverImageCard from '../common/HoverImageCard';
 import contentData from '../../data/content.json';
 import toursData from '../../data/tours.json';
-// import { siteConfig } from '../../config/siteConfig';
 
 const HomeView = ({ theme, onNavigate, onTourSelect }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const scrollContainerRef = useRef(null);
-  const heroContent = contentData.homepage;
+  
+  // 安全地获取首页内容
+  const heroContent = contentData.homepage || {};
+  const slides = heroContent.heroSlides || [];
+  const curatorsPick = heroContent.curatorsPick || {};
+  const aboutSection = heroContent.aboutSection || {};
+  
   const featuredTours = toursData.tours.filter(tour => tour.featured);
 
-  // Auto-advance hero slides
+  // 自动播放幻灯片
   useEffect(() => {
+    if (slides.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroContent.heroSlides.length);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [heroContent.heroSlides.length]);
+  }, [slides.length]);
 
-  // Carousel scroll handlers
+  // 滚动控制
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -260, behavior: 'smooth' });
+      scrollContainerRef.current.scrollBy({ left: -320, behavior: 'smooth' });
     }
   };
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 260, behavior: 'smooth' });
+      scrollContainerRef.current.scrollBy({ left: 320, behavior: 'smooth' });
     }
   };
 
@@ -43,9 +49,9 @@ const HomeView = ({ theme, onNavigate, onTourSelect }) => {
   return (
     <div className={`animate-fade-in ${theme.bg} min-h-screen transition-colors duration-500 bg-pattern`}>
       
-      {/* Hero Section with Slideshow */}
+      {/* Hero Section */}
       <div className="relative h-[70vh] w-full overflow-hidden bg-black">
-        {heroContent.heroSlides.map((slide, index) => (
+        {slides.map((slide, index) => (
           <div 
             key={index} 
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -68,7 +74,7 @@ const HomeView = ({ theme, onNavigate, onTourSelect }) => {
           </div>
         ))}
 
-        {/* CTA Button */}
+        {/* CTA & Indicators */}
         <div className="absolute bottom-16 left-0 w-full flex justify-center z-10">
           <button 
             onClick={() => onNavigate('list', 'destination')} 
@@ -77,10 +83,8 @@ const HomeView = ({ theme, onNavigate, onTourSelect }) => {
             Start Journey
           </button>
         </div>
-
-        {/* Slide Indicators */}
         <div className="absolute bottom-6 left-0 w-full flex justify-center gap-3 z-10">
-          {heroContent.heroSlides.map((_, idx) => (
+          {slides.map((_, idx) => (
             <button 
               key={idx} 
               onClick={() => setCurrentSlide(idx)} 
@@ -112,44 +116,90 @@ const HomeView = ({ theme, onNavigate, onTourSelect }) => {
           ))}
         </div>
 
-        {/* Curator's Pick Section */}
-        <div className="mb-20">
-          <div className="flex justify-between items-end mb-8">
-            <h2 className={`text-2xl font-serif italic ${theme.text}`}>
-              {heroContent.curatorsPick.title}
-            </h2>
-            <div className={`flex space-x-3 ${theme.text}`}>
-              <ArrowRight 
-                onClick={scrollLeft} 
-                className="rotate-180 cursor-pointer opacity-50 hover:opacity-100 transition" 
-              />
-              <ArrowRight 
-                onClick={scrollRight} 
-                className="cursor-pointer hover:opacity-60 transition" 
-              />
+        {/* Curator's Pick Section - 修复并显示图框 */}
+        {curatorsPick.title && (
+          <div className="mb-20">
+            <div className="flex justify-between items-end mb-8">
+              <div>
+                <h2 className={`text-2xl font-serif italic ${theme.text}`}>
+                  {curatorsPick.title}
+                </h2>
+                <p className={`text-[10px] uppercase tracking-widest mt-2 ${theme.textMuted}`}>
+                  {curatorsPick.subtitle}
+                </p>
+              </div>
+              <div className={`flex space-x-3 ${theme.text}`}>
+                <ArrowRight 
+                  onClick={scrollLeft} 
+                  className="rotate-180 cursor-pointer opacity-50 hover:opacity-100 transition" 
+                />
+                <ArrowRight 
+                  onClick={scrollRight} 
+                  className="cursor-pointer hover:opacity-60 transition" 
+                />
+              </div>
+            </div>
+            
+            {/* 滚动容器：flex布局，禁止换行，允许横向滚动 */}
+             <div 
+               ref={scrollContainerRef} 
+               className="flex gap-4 overflow-x-auto pb-10 scrollbar-hide scroll-smooth"
+             >
+               {featuredTours.map((tour) => (
+                  <div 
+                   key={tour.id} 
+                   /* w-[25vw] 表示卡片占据视口宽度的 25%
+                      min-w-[220px] 保证在小屏幕上不会缩得太小
+                   */
+                   className="min-w-[220px] w-[26vw] md:min-w-[250px] md:w-[26vw] flex-shrink-0"
+                  >
+                   <HoverImageCard 
+                     src={tour.image} 
+                     title={tour.title} 
+                     price={tour.price}
+                     currency={tour.currency}
+                     theme={theme}
+                     onClick={() => onTourSelect(tour)}
+                   />
+                </div>
+              ))}
             </div>
           </div>
-          
-          {/* Scrollable Tour Cards */}
-          <div 
-            ref={scrollContainerRef} 
-            className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide scroll-smooth"
-          >
-            {featuredTours.map((tour) => (
-              <HoverImageCard 
-                key={tour.id}
-                src={tour.image} 
-                title={tour.title} 
-                price={tour.price}
-                currency={tour.currency}
-                theme={theme}
-                onClick={() => onTourSelect(tour)}
-              />
-            ))}
-          </div>
-        </div>
+        )}
 
-        {/* Category Tags Section - Continued in Part 2 */}
+        {/* About Section */}
+<section className="py-24 px-6 md:px-12 bg-[#F9F9F9]">
+  <div className="max-w-4xl mx-auto text-center">
+    {/* 使用变量 aboutSection.est */}
+    <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-8">
+      {aboutSection?.est || 'Est. 2024'}
+    </p>
+    
+    {/* 使用变量 aboutSection.title */}
+    <h2 className="text-4xl md:text-5xl font-serif italic text-gray-900 mb-10">
+      {aboutSection?.title || 'About Nectar Travel'}
+    </h2>
+    
+    <div className="relative inline-block">
+      <span className="absolute -left-8 -top-4 text-4xl text-gray-200 font-serif">“</span>
+      {/* 使用变量 aboutSection.quote */}
+      <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light italic">
+        {aboutSection?.quote || 'We do not sell tickets; we grant keys to the hidden doors of the world.'}
+      </p>
+      <span className="absolute -right-8 -bottom-4 text-4xl text-gray-200 font-serif">”</span>
+    </div>
+
+    {/* Logo 部分保持不变 */}
+    <div className="mt-16 flex justify-center">
+      <img 
+        src="images/hero/nectartravel.jpg" 
+        alt="Nectar Travel Seal" 
+        className="w-32 h-auto opacity-70 mix-blend-multiply grayscale hover:opacity-100 transition-opacity duration-700"
+      />
+    </div>
+  </div>
+</section>
+
       </div>
     </div>
   );
