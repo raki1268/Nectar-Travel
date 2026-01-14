@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-// Styles
+// eslint-disable-next-line
 import GlobalStyles from './styles/GlobalStyles';
 
 // Config & Themes
@@ -17,7 +17,7 @@ import MembershipModal from './components/common/MembershipModal';
 
 // View Components
 import HomeView from './components/views/HomeView';
-import ListView from './components/views/ListView';
+import ListView from './components/views/HomeViewlistpages';
 import DetailView from './components/views/DetailView';
 import AboutView from './components/views/AboutView';
 import CategoryLandingView from './components/views/CategoryLandingView';

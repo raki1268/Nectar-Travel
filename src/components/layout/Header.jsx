@@ -17,14 +17,14 @@ const Header = ({ theme, currentView, onNavigate }) => {
 
   // 导航菜单项
   const navItems = [
-    { label: 'SEASON', view: 'home' },
-    { label: 'DESTINATION', view: 'list' },
+    { label: 'SEASON', view: 'list', type: 'season' },
+    { label: 'DESTINATION', view: 'list', type: 'destination' },
     { label: 'ABOUT', view: 'about' },
-    { label: 'CONTACT', view: 'home' }
+    { label: 'CONTACT', view: 'contact' }
   ];
 
-  const handleNavigate = (view) => {
-    onNavigate(view);
+  const handleNavigateClick = (view, type = null) => {
+    onNavigate(view, type);
     setIsMenuOpen(false);
   };
 
@@ -35,13 +35,13 @@ const Header = ({ theme, currentView, onNavigate }) => {
         {/* 左侧菜单 */}
         <div className="flex space-x-8 flex-1">
           <button
-            onClick={() => handleNavigate('home')}
+            onClick={() => handleNavigateClick('list', 'season')}
             className="text-gray-800 font-medium hover:text-gray-600 transition"
           >
             SEASON
           </button>
           <button
-            onClick={() => handleNavigate('list')}
+            onClick={() => handleNavigateClick('list', 'destination')}
             className="text-gray-800 font-medium hover:text-gray-600 transition"
           >
             DESTINATION
@@ -51,7 +51,7 @@ const Header = ({ theme, currentView, onNavigate }) => {
         {/* 中间 Logo */}
         <h1
           className="text-2xl font-serif text-gray-800 cursor-pointer hover:text-gray-600 transition flex-shrink-0 mx-8"
-          onClick={() => handleNavigate('home')}
+          onClick={() => handleNavigateClick('home')}
         >
           Nectar TRAVEL
         </h1>
@@ -59,13 +59,13 @@ const Header = ({ theme, currentView, onNavigate }) => {
         {/* 右侧菜单 */}
         <div className="flex space-x-8 flex-1 justify-end">
           <button
-            onClick={() => handleNavigate('about')}
+            onClick={() => handleNavigateClick('about')}
             className="text-gray-800 font-medium hover:text-gray-600 transition"
           >
             ABOUT
           </button>
           <button
-            onClick={() => handleNavigate('home')}
+            onClick={() => handleNavigateClick('contact')}
             className="text-gray-800 font-medium hover:text-gray-600 transition"
           >
             CONTACT
@@ -86,7 +86,7 @@ const Header = ({ theme, currentView, onNavigate }) => {
         {/* 中间 Logo */}
         <h1
           className="text-lg font-serif text-gray-800 cursor-pointer"
-          onClick={() => handleNavigate('home')}
+          onClick={() => handleNavigateClick('home')}
         >
           Nectar TRAVEL
         </h1>
@@ -101,8 +101,8 @@ const Header = ({ theme, currentView, onNavigate }) => {
           <div className="flex flex-col space-y-4 px-4 py-4">
             {navItems.map((item) => (
               <button
-                key={item.view}
-                onClick={() => handleNavigate(item.view)}
+                key={item.label}
+                onClick={() => handleNavigateClick(item.view, item.type || null)}
                 className="text-gray-800 font-medium text-left hover:text-gray-600 transition py-2 border-b border-gray-200 last:border-b-0"
               >
                 {item.label}
