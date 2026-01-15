@@ -89,6 +89,62 @@ const GlobalStyles = () => (
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+
+    /* ==================== Navigation Fixed Styles ==================== */
+    
+    /* Fade In Up Animation for Products */
+    @keyframes fade-in-up {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+    }
+
+    .animate-in { 
+      animation: fade-in-up 0.8s ease-out forwards; 
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar { 
+      width: 5px; 
+    }
+    ::-webkit-scrollbar-track { 
+      background: white; 
+    }
+    ::-webkit-scrollbar-thumb { 
+      background: #e5e5e5; 
+      border-radius: 10px; 
+    }
+
+    /* Fixed Navigation with Glass Morphism Effect */
+    .nav-fixed {
+      background: linear-gradient(
+        to bottom, 
+        transparent, 
+        rgba(255, 255, 255, 0.15) 30%, 
+        rgba(255, 255, 255, 0.15) 70%, 
+        transparent
+      ) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+    }
+
+    /* Glass Overlay for Extended Background */
+    .glass-overlay {
+      background: linear-gradient(
+        to bottom, 
+        transparent, 
+        rgba(255, 255, 255, 0.15) 30%, 
+        rgba(255, 255, 255, 0.15) 70%, 
+        transparent
+      ) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+    }
   `}</style>
 );
 
