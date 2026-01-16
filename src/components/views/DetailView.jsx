@@ -17,8 +17,11 @@ const DetailView = ({ selectedTour }) => {
   const [showFloatingBar, setShowFloatingBar] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [activeDay, setActiveDay] = useState(0);
+  const [hotelCarouselIdx, setHotelCarouselIdx] = useState(0);
   const scrollTimeoutRef = useRef(null);
   const idleTimeoutRef = useRef(null);
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
 
   useEffect(() => {
     const resetIdleTimer = () => {
@@ -57,6 +60,116 @@ const DetailView = ({ selectedTour }) => {
       clearTimeout(scrollTimeoutRef.current);
     };
   }, []);
+
+  // 初始化地图
+  useEffect(() => {
+    if (!tour.itinerary || tour.itinerary.length === 0) return;
+
+    // 动态加载 Leaflet
+    if (!window.L) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css';
+      document.head.appendChild(link);
+
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js';
+      script.onload = initializeMap;
+      document.body.appendChild(script);
+    } else {
+      initializeMap();
+    }
+
+    function initializeMap() {
+      if (!mapRef.current || mapInstanceRef.current) return;
+
+      const coordinates = tour.itinerary
+        .filter(item => item.location)
+        .map(item => {
+          // 模拟坐标，实际应该使用真实坐标
+          const coordMap = {
+            'Toronto': [43.6532, -79.3832],
+            'Niagara Falls': [43.0896, -79.0849],
+            'Ottawa': [45.4215, -75.6972],
+            'Montreal': [45.5017, -73.5673],
+            'Quebec City': [46.8139, -71.2080]
+          };
+          return coordMap[item.location] || [45.5, -74.5];
+        });
+
+      const map = window.L.map(mapRef.current).setView(coordinates[0] || [45.5, -74.5], 6);
+
+      window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+
+      // 添加标记
+      const markers = [];
+      tour.itinerary.forEach((item, idx) => {
+        const coordMap = {
+          'Toronto': [43.6532, -79.3832],
+          'Niagara Falls': [43.0896, -79.0849],
+          'Ottawa': [45.4215, -75.6972],
+          'Montreal': [45.5017, -73.5673],
+          'Quebec City': [46.8139, -71.2080]
+        };
+        const coords = coordMap[item.location] || [45.5, -74.5];
+
+        const isVisited = idx <= activeDay;
+        const marker = window.L.circleMarker(coords, {
+          radius: 8,
+          fillColor: isVisited ? '#1c1917' : '#ffffff',
+          color: '#1c1917',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: isVisited ? 1 : 0.5
+        })
+          .bindPopup(`<strong>${item.location}</strong><br/>Day ${item.day}`)
+          .addTo(map);
+
+        markers.push({ marker, idx });
+      });
+
+      // 绘制路线
+      const coords = tour.itinerary
+        .filter(item => item.location)
+        .map(item => {
+          const coordMap = {
+            'Toronto': [43.6532, -79.3832],
+            'Niagara Falls': [43.0896, -79.0849],
+            'Ottawa': [45.4215, -75.6972],
+            'Montreal': [45.5017, -73.5673],
+            'Quebec City': [46.8139, -71.2080]
+          };
+          return coordMap[item.location] || [45.5, -74.5];
+        });
+
+      if (coords.length > 1) {
+        window.L.polyline(coords, {
+          color: '#1c1917',
+          weight: 2,
+          opacity: 0.6
+        }).addTo(map);
+      }
+
+      mapInstanceRef.current = { map, markers };
+    }
+  }, [tour.itinerary, activeDay]);
+
+  // 当 activeDay 改变时更新地图标记
+  useEffect(() => {
+    if (mapInstanceRef.current) {
+      const { markers } = mapInstanceRef.current;
+      markers.forEach(({ marker, idx }) => {
+        const isVisited = idx <= activeDay;
+        marker.setStyle({
+          fillColor: isVisited ? '#1c1917' : '#ffffff',
+          fillOpacity: isVisited ? 1 : 0.5
+        });
+      });
+    }
+  }, [activeDay]);
 
   // 安全检查并兼容数据结构（在所有 hooks 之后）
   if (!tour || !tour.heroImages || !Array.isArray(tour.heroImages) || tour.heroImages.length === 0) {
@@ -256,21 +369,26 @@ const DetailView = ({ selectedTour }) => {
         <div className="max-w-7xl mx-auto px-6 md:px-16">
           <h2 className={`text-2xl md:text-3xl font-serif mb-12 ${theme.text}`}>Your Detailed Journey</h2>
           <div className="flex flex-col lg:flex-row gap-8">
+            {/* Map - Sticky */}
             <div className="lg:w-1/3">
               <div className="lg:sticky lg:top-24">
-                <div className="w-full h-[500px] bg-gradient-to-br from-stone-100 to-stone-200 rounded-sm border border-stone-300 flex items-center justify-center text-stone-500">
-                  <div className="text-center">
-                    <p className="text-sm mb-2">Interactive Map</p>
-                    <p className="text-xs">Showing itinerary route</p>
-                  </div>
-                </div>
+                <div 
+                  id="tour-map"
+                  className="w-full h-[500px] rounded-sm border border-stone-300 shadow-lg"
+                />
               </div>
             </div>
+
+            {/* Itinerary & Hotels - Scrollable */}
             <div className="lg:w-2/3">
               <div className="space-y-8">
-                {tour.itinerary.map((item, idx) => (
+                {tour.itinerary && tour.itinerary.map((item, idx) => (
                   <div key={idx}>
-                    <div className="cursor-pointer group mb-6" onClick={() => setActiveDay(idx)}>
+                    {/* Day Card */}
+                    <div 
+                      className="cursor-pointer group mb-6" 
+                      onClick={() => setActiveDay(idx)}
+                    >
                       <div className={`flex items-start gap-4 p-4 border border-stone-200 rounded-sm hover:shadow-lg transition-shadow ${activeDay === idx ? 'bg-stone-900' : 'bg-stone-50'}`}>
                         <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold transition-colors ${activeDay === idx ? 'bg-white text-stone-900' : 'bg-stone-200 text-stone-900'}`}>
                           {item.day}
@@ -284,15 +402,74 @@ const DetailView = ({ selectedTour }) => {
                         <img src={item.image} alt={item.location} className="w-full h-48 object-cover rounded-sm" />
                       </div>
                     </div>
-                    <div className="ml-8 mb-8 p-4 border-l-4 border-stone-900">
-                      <p className="text-xs uppercase tracking-widest text-amber-600 font-semibold mb-1">Hotel</p>
-                      <h4 className={`text-lg font-serif ${theme.text} mb-2`}>{item.hotel.name}</h4>
-                      <p className="text-xs text-stone-500 mb-2">{item.hotel.city}</p>
-                      <p className={`text-xs ${theme.textMuted}`}>{item.hotel.description}</p>
-                    </div>
                   </div>
                 ))}
               </div>
+
+              {/* Hotel Carousel */}
+              {tour.itinerary && tour.itinerary.length > 0 && (
+                <div className="mt-12 pt-8 border-t border-stone-200">
+                  <h3 className={`text-xl font-serif ${theme.text} mb-8`}>Recommended Hotels</h3>
+                  
+                  {/* Hotels Grid */}
+                  <div className="relative">
+                    <div className="overflow-hidden">
+                      <div 
+                        className="flex gap-6 transition-transform duration-500 ease-out"
+                        style={{
+                          transform: `translateX(-${hotelCarouselIdx * (100 / 2)}%)`
+                        }}
+                      >
+                        {tour.itinerary.map((item, idx) => (
+                          <div key={idx} className="flex-shrink-0 w-1/2">
+                            <div className="p-5 border border-stone-200 rounded-sm bg-white hover:shadow-lg transition-shadow h-full">
+                              <p className="text-xs uppercase tracking-widest text-amber-600 font-semibold mb-2">Hotel</p>
+                              <h4 className={`text-base font-serif ${theme.text} mb-2 line-clamp-2`}>{item.hotel.name}</h4>
+                              <p className="text-xs text-stone-500 mb-3">{item.hotel.city}</p>
+                              <p className={`text-xs ${theme.textMuted} leading-relaxed line-clamp-3`}>{item.hotel.description}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Hotel Carousel Controls */}
+                    {Math.ceil(tour.itinerary.length / 2) > 1 && (
+                      <>
+                        <button
+                          onClick={() => setHotelCarouselIdx(Math.max(0, hotelCarouselIdx - 1))}
+                          disabled={hotelCarouselIdx === 0}
+                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 z-20 bg-stone-900 hover:bg-stone-800 disabled:bg-stone-300 p-2 rounded-full transition-colors text-white"
+                        >
+                          <ChevronLeft className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => setHotelCarouselIdx(Math.min(Math.ceil(tour.itinerary.length / 2) - 1, hotelCarouselIdx + 1))}
+                          disabled={hotelCarouselIdx >= Math.ceil(tour.itinerary.length / 2) - 1}
+                          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 z-20 bg-stone-900 hover:bg-stone-800 disabled:bg-stone-300 p-2 rounded-full transition-colors text-white"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Hotel Carousel Indicators */}
+                  {Math.ceil(tour.itinerary.length / 2) > 1 && (
+                    <div className="flex justify-center gap-2 mt-6">
+                      {Array.from({ length: Math.ceil(tour.itinerary.length / 2) }).map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setHotelCarouselIdx(idx)}
+                          className={`w-2 h-2 rounded-full transition-all ${
+                            idx === hotelCarouselIdx ? 'bg-stone-900 w-8' : 'bg-stone-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
