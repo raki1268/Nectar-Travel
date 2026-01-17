@@ -1,4 +1,7 @@
-
+import { cities } from './cities';
+import { hotels } from './hotels';
+import { guides } from './guides';
+import { globalConfig } from './globalConfig';
 
 export const tourDetailsMap = {
   1: {
@@ -21,12 +24,13 @@ export const tourDetailsMap = {
       "images/categories/autumn.jpg"
     ],
     introductionImage: "images/categories/autumn.jpg",
+    guideId: "lorry",
     destinations: [
-      { name: "Toronto", days: "1-2", image: "images/categories/autumn.jpg" },
-      { name: "Niagara Falls", days: "3", image: "images/categories/autumn.jpg" },
-      { name: "Ottawa", days: "4-5", image: "images/categories/autumn.jpg" },
-      { name: "Montreal", days: "6-8", image: "images/categories/autumn.jpg" },
-      { name: "Quebec City", days: "9-12", image: "images/categories/autumn.jpg" }
+      { cityId: "toronto", days: "1-2" },
+      { cityId: "niagaraFalls", days: "3" },
+      { cityId: "ottawa", days: "4-5" },
+      { cityId: "montreal", days: "6-8" },
+      { cityId: "quebecCity", days: "9-12" }
     ],
     highlights: [
       "Priority access to CN Tower and behind-the-scenes Parliament tour",
@@ -43,63 +47,31 @@ export const tourDetailsMap = {
       { id: "rel-maritime-003", title: "Maritime Coastal Adventure", price: 4500, days: 8 },
       { id: "rel-rocky-004", title: "Rocky Mountain Explorer", price: 5500, days: 14 }
     ],
-    bookingPolicy: {
-      cancellation: [
-        { days: "More than 60 days before departure", refund: "100% refund" },
-        { days: "30-60 days before departure", refund: "75% refund" },
-        { days: "15-30 days before departure", refund: "50% refund" },
-        { days: "Less than 15 days", refund: "No refund" }
-      ],
-      payment: [
-        { method: "Credit Card", description: "Visa, MasterCard, American Express accepted" },
-        { method: "Bank Transfer", description: "Direct bank transfer available for orders over $5000" },
-        { method: "Payment Plan", description: "Flexible 3-month payment plan with 5% surcharge" }
-      ]
-    },
-    guide: {
-      name: "Lorry",
-      avatar: "images/categories/autumn.jpg",
-      intro: "With over 15 years of experience exploring Canada's hidden gems, I bring passion and expertise to every journey."
-    },
-    teamInfo: {
-      image: "images/categories/autumn.jpg",
-      description: "Our professional team is dedicated to providing exceptional travel experiences. We carefully curate each detail to ensure your journey is seamless and memorable. From expert local guides to luxury accommodations, we handle everything so you can focus on enjoying the remarkable landscapes and vibrant cultures of Eastern Canada. Our commitment to excellence ensures every moment of your trip exceeds expectations."
-    },
     itinerary: [
       {
         day: "1-2",
-        location: "Toronto",
-        description: "Experience Canada's largest city with iconic landmarks and vibrant neighborhoods.",
-        image: "images/categories/autumn.jpg",
-        hotel: { city: "Toronto", name: "The Distillery Lofts Hotel", description: "Luxury boutique hotel in Victorian-era historic district with modern amenities and charm." }
+        cityId: "toronto",
+        hotelId: "distillery-lofts"
       },
       {
         day: "3",
-        location: "Niagara Falls",
-        description: "Witness the spectacular power of Niagara Falls and explore wine country.",
-        image: "images/categories/autumn.jpg",
-        hotel: { city: "Niagara-on-the-Lake", name: "Prince of Wales Hotel", description: "Historic luxury hotel overlooking the Niagara River with elegant Victorian architecture." }
+        cityId: "niagaraFalls",
+        hotelId: "prince-of-wales"
       },
       {
         day: "4-5",
-        location: "Ottawa",
-        description: "Discover Canada's capital with Parliament Hill, museums, and river cruises.",
-        image: "images/categories/autumn.jpg",
-        hotel: { city: "Ottawa", name: "Fairmont Château Laurier", description: "Grand historic hotel in the heart of downtown near all major attractions." }
+        cityId: "ottawa",
+        hotelId: "fairmont-chateau-laurier"
       },
       {
         day: "6-8",
-        location: "Montreal",
-        description: "Immerse in Montreal's artistic culture, gastronomy, and historic Old Town.",
-        image: "images/categories/autumn.jpg",
-        hotel: { city: "Montreal", name: "Ritz-Carlton Montreal", description: "Prestigious luxury hotel with sophisticated design and world-class service." }
+        cityId: "montreal",
+        hotelId: "ritz-carlton-montreal"
       },
       {
         day: "9-12",
-        location: "Quebec City",
-        description: "Explore the charm of North America's only walled city and Île d'Orléans.",
-        image: "images/categories/autumn.jpg",
-        hotel: { city: "Quebec City", name: "Château Frontenac", description: "Iconic luxury castle hotel overlooking the St. Lawrence River with timeless elegance." }
+        cityId: "quebecCity",
+        hotelId: "chateau-frontenac"
       }
     ]
   },
@@ -123,15 +95,16 @@ export const tourDetailsMap = {
       "images/tours/id2/gallary-10.jpg"
     ],
     introductionImage: "images/tours/id2/pienza.jpg",
+    guideId: "qi-wei",
     destinations: [
-      { name: "Milan & Lake Como", days: "1-3", image: "images/tours/id2/milan.jpg" },
-      { name: "Dolomites", days: "4-5", image: "images/tours/id2/dolomites.jpg" },
-      { name: "Venice", days: "6", image: "images/tours/id2/venice.jpg" },
-      { name: "Tuscany & Florence", days: "7-10", image: "images/tours/id2/florence.jpg" },
-      { name: "Amalfi Coast", days: "11-12", image: "images/tours/id2/amalfi-coast.jpg" },
-      { name: "Rome", days: "13-15", image: "images/tours/id2/rome.jpg" }
+      { cityId: "milan", days: "1-3" },
+      { cityId: "dolomites", days: "4-5" },
+      { cityId: "venice", days: "6" },
+      { cityId: "florence", days: "7-10" },
+      { cityId: "amalfiCoast", days: "11-12" },
+      { cityId: "rome", days: "13-15" }
     ],
-   highlights: [
+    highlights: [
       "Private self-drive speedboat tour on the sparkling Lake Como",
       "Scenic cable car ride through the breathtaking Dolomite Alps",
       "Romantic gondola ride through the winding canals of Venice",
@@ -146,71 +119,74 @@ export const tourDetailsMap = {
       { id: "rel-swiss-002", title: "Swiss Alps & Lakes Luxury", price: 7200, days: 10 },
       { id: "rel-europe-003", title: "Grand European Capitals", price: 8500, days: 20 }
     ],
-    bookingPolicy: {
-      cancellation: [
-        { days: "More than 60 days before departure", refund: "100% refund" },
-        { days: "30-60 days before departure", refund: "75% refund" },
-        { days: "15-30 days before departure", refund: "50% refund" },
-        { days: "Less than 15 days", refund: "No refund" }
-      ],
-      payment: [
-        { method: "Credit Card", description: "Visa, MasterCard, American Express accepted" },
-        { method: "Bank Transfer", description: "Direct bank transfer available for orders over $5000" },
-        { method: "Payment Plan", description: "Flexible 3-month payment plan with 5% surcharge" }
-      ]
-    },
-    guide: {
-      name: "Qi Wei",
-      avatar: "images/categories/autumn.jpg",
-      intro: "Our expert team provides professional Chinese-speaking services and curated luxury experiences across Italy's most beautiful regions."
-    },
-    teamInfo: {
-      image: "images/categories/autumn.jpg",
-      description: "Our professional team is dedicated to providing exceptional travel experiences. We carefully curate each detail to ensure your journey is seamless and memorable. From expert local guides to luxury accommodations, we handle everything so you can focus on enjoying the remarkable landscapes and vibrant cultures of Eastern Canada. Our commitment to excellence ensures every moment of your trip exceeds expectations."
-    },
     itinerary: [
-     {
+      {
         day: "1-3",
-        location: "Milan & Lake Como",
-        description: "Explore the global fashion hub of Milan and the stunning villas of Lake Como surrounded by the Alps.",
-        image: "images/tour/id2/milan.jpg",
-        hotel: { city: "Lake Como", name: "Grand Hotel Tremezzo", description: "An iconic art nouveau masterpiece offering unparalleled views of Bellagio and the lake." }
+        cityId: "milan",
+        hotelId: "grand-hotel-tremezzo"
       },
       {
         day: "4-5",
-        location: "Dolomites",
-        description: "Experience the majestic peaks and jagged skylines of the Alps, a paradise for nature lovers.",
-        image: "images/tours/id2/dolomites.jpg",
-        hotel: { city: "Cortina d'Ampezzo", name: "Cristallo, a Luxury Collection Resort", description: "Historic mountain resort offering refined elegance in the heart of the Dolomites." }
+        cityId: "dolomites",
+        hotelId: "cristallo"
       },
       {
         day: "6",
-        location: "Venice",
-        description: "The jewel of Italy, known for its intricate canals, elegant bridges, and deep cultural heritage.",
-        image: "images/tours/id2/venice.jpg",
-        hotel: { city: "Venice", name: "Belmond Hotel Cipriani", description: "Legendary luxury on Giudecca Island with spectacular views of the Venetian lagoon." }
+        cityId: "venice",
+        hotelId: "belmond-hotel-cipriani"
       },
       {
         day: "7-10",
-        location: "Tuscany & Florence",
-        description: "Immerse in the Renaissance art of Florence and the rolling hills, vineyards, and cypress roads of Tuscany.",
-        image: "images/tours/id2/florence.jpg",
-        hotel: { city: "Florence", name: "Four Seasons Hotel Firenze", description: "A Renaissance palace featuring an enchanting private botanical garden." }
+        cityId: "florence",
+        hotelId: "four-seasons-firenze"
       },
       {
         day: "11-12",
-        location: "Amalfi Coast",
-        description: "Breathtaking cliffside views, colorful coastal towns, and the sparkling blue waters of the Mediterranean.",
-        image: "images/tours/id2/amalfi-coast.jpg",
-        hotel: { city: "Positano", name: "Le Sirenuse", description: "A luxury boutique hotel offering the most famous views of Positano's colorful houses." }
+        cityId: "amalfiCoast",
+        hotelId: "le-sirenuse"
       },
       {
         day: "13-15",
-        location: "Rome",
-        description: "The Eternal City, home to glorious ancient ruins and a rich tapestry of history and culture.",
-        image: "images/tours/id2/rome.jpg",
-        hotel: { city: "Rome", name: "Hotel Hassler Roma", description: "Set at the top of the Spanish Steps, one of the city's most prestigious landmarks." }
+        cityId: "rome",
+        hotelId: "hotel-hassler-roma"
       }
     ]
   }
 };
+
+/**
+ * 获取完整的行程详情（包含所有引用数据）
+ * @param {number} tourId - 行程ID
+ * @returns {object} 完整的行程信息
+ */
+export function getTourDetails(tourId) {
+  const tour = tourDetailsMap[tourId];
+  
+  if (!tour) {
+    console.warn(`Tour with ID ${tourId} not found`);
+    return null;
+  }
+
+  // 构建完整的itinerary，包含城市和酒店详情
+  const itineraryWithDetails = tour.itinerary.map(item => ({
+    day: item.day,
+    city: cities[item.cityId],
+    hotel: hotels[item.hotelId]
+  }));
+
+  // 构建完整的destinations，包含城市详情
+  const destinationsWithDetails = tour.destinations.map(dest => ({
+    days: dest.days,
+    ...cities[dest.cityId]
+  }));
+
+  // 返回完整的行程数据
+  return {
+    ...tour,
+    guide: guides[tour.guideId],
+    destinations: destinationsWithDetails,
+    itinerary: itineraryWithDetails,
+    bookingPolicy: globalConfig.bookingPolicy,
+    teamInfo: globalConfig.teamInfo
+  };
+}

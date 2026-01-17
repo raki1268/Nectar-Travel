@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { tourDetailsMap } from '../../data/tourDetailsMap';
+import { getTourDetails } from '../../data/tourDetailsMap';
 import { themeConfig } from '../../config/themeConfig';
 
 const DetailView = ({ selectedTour }) => {
@@ -9,7 +9,9 @@ const DetailView = ({ selectedTour }) => {
   // 获取 tour id，优先使用 selectedTour 的 id
   const tourId = selectedTour?.id || 1;
   const baseData = selectedTour || {};
-  const detailData = tourDetailsMap[tourId] || tourDetailsMap[1] || {};
+  
+  // 使用新的 getTourDetails 函数获取完整数据
+  const detailData = getTourDetails(tourId) || {};
   const tour = { ...baseData, ...detailData };
 
   const [currentHeroIdx, setCurrentHeroIdx] = useState(0);
@@ -65,21 +67,26 @@ const DetailView = ({ selectedTour }) => {
   useEffect(() => {
     if (!tour.itinerary || tour.itinerary.length === 0 || !window.L) return;
 
-    // 延迟一下确保 DOM 已经挂载
     setTimeout(() => {
       if (!mapRef.current || mapInstanceRef.current) return;
 
       try {
         const coordMap = {
-          'Toronto': [43.6532, -79.3832],
-          'Niagara Falls': [43.0896, -79.0849],
-          'Ottawa': [45.4215, -75.6972],
-          'Montreal': [45.5017, -73.5673],
-          'Quebec City': [46.8139, -71.2080]
+          'toronto': [43.6532, -79.3832],
+          'niagaraFalls': [43.0896, -79.0849],
+          'ottawa': [45.4215, -75.6972],
+          'montreal': [45.5017, -73.5673],
+          'quebecCity': [46.8139, -71.2080],
+          'milan': [45.4642, 9.1900],
+          'dolomites': [46.4108, 11.8860],
+          'venice': [45.4408, 12.3155],
+          'florence': [43.7696, 11.2558],
+          'amalfiCoast': [40.6333, 14.6029],
+          'rome': [41.9028, 12.4964]
         };
 
         const coordinates = tour.itinerary
-          .map(item => coordMap[item.location] || [45.5, -74.5]);
+          .map(item => coordMap[item.city?.id] || [45.5, -74.5]);
 
         const map = window.L.map(mapRef.current).setView(coordinates[0], 6);
 
@@ -90,7 +97,7 @@ const DetailView = ({ selectedTour }) => {
 
         const markers = [];
         tour.itinerary.forEach((item, idx) => {
-          const coords = coordMap[item.location] || [45.5, -74.5];
+          const coords = coordMap[item.city?.id] || [45.5, -74.5];
           const isVisited = idx <= activeDay;
 
           const marker = window.L.circleMarker(coords, {
@@ -101,7 +108,7 @@ const DetailView = ({ selectedTour }) => {
             opacity: 1,
             fillOpacity: isVisited ? 1 : 0.5
           })
-            .bindPopup(`<strong>${item.location}</strong><br/>Day ${item.day}`)
+            .bindPopup(`<strong>${item.city?.name}</strong><br/>Day ${item.day}`)
             .addTo(map);
 
           markers.push({ marker, idx });
@@ -122,7 +129,6 @@ const DetailView = ({ selectedTour }) => {
     }, 100);
   }, [tour.itinerary]);
 
-  // 当 activeDay 改变时更新地图标记
   useEffect(() => {
     if (mapInstanceRef.current) {
       const { markers } = mapInstanceRef.current;
@@ -136,7 +142,7 @@ const DetailView = ({ selectedTour }) => {
     }
   }, [activeDay]);
 
-  // 安全检查并兼容数据结构（在所有 hooks 之后）
+  // 安全检查
   if (!tour || !tour.heroImages || !Array.isArray(tour.heroImages) || tour.heroImages.length === 0) {
     return <div className="p-8 text-center text-red-600">
       <p>错误：无法加载旅游数据</p>
@@ -294,30 +300,34 @@ const DetailView = ({ selectedTour }) => {
       </div>
 
       {/* D板块: Guide */}
-      <div className="bg-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-16 flex flex-col items-center text-center">
-          <div className="w-32 h-32 rounded-full overflow-hidden mb-6 shadow-lg">
-            <img src={tour.guide.avatar} alt={tour.guide.name} className="w-full h-full object-cover" />
+      {tour.guide && (
+        <div className="bg-white py-16 md:py-20">
+          <div className="max-w-7xl mx-auto px-6 md:px-16 flex flex-col items-center text-center">
+            <div className="w-32 h-32 rounded-full overflow-hidden mb-6 shadow-lg">
+              <img src={tour.guide.avatar} alt={tour.guide.name} className="w-full h-full object-cover" />
+            </div>
+            <h3 className={`text-2xl font-serif ${theme.text} mb-4`}>{tour.guide.name}</h3>
+            <p className={`${theme.textMuted} max-w-2xl leading-relaxed`}>{tour.guide.intro}</p>
           </div>
-          <h3 className={`text-2xl font-serif ${theme.text} mb-4`}>{tour.guide.name}</h3>
-          <p className={`${theme.textMuted} max-w-2xl leading-relaxed`}>{tour.guide.intro}</p>
         </div>
-      </div>
+      )}
 
       {/* E板块: Team */}
-      <div className="bg-stone-50 py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="flex flex-col lg:flex-row gap-12 items-start">
-            <div className="lg:w-1/2">
-              <img src={tour.teamInfo.image} alt="team" className="w-full h-96 object-cover rounded-sm shadow-lg" />
-            </div>
-            <div className="lg:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-8 uppercase tracking-wide">Our Team Could Bring</h2>
-              <p className={`${theme.textMuted} leading-relaxed text-base`}>{tour.teamInfo.description}</p>
+      {tour.teamInfo && (
+        <div className="bg-stone-50 py-16 md:py-20">
+          <div className="max-w-7xl mx-auto px-6 md:px-16">
+            <div className="flex flex-col lg:flex-row gap-12 items-start">
+              <div className="lg:w-1/2">
+                <img src={tour.teamInfo.image} alt="team" className="w-full h-96 object-cover rounded-sm shadow-lg" />
+              </div>
+              <div className="lg:w-1/2">
+                <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-8 uppercase tracking-wide">Our Team Could Bring</h2>
+                <p className={`${theme.textMuted} leading-relaxed text-base`}>{tour.teamInfo.description}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* F板块: CTA */}
       <div className="bg-stone-900 text-white py-20">
@@ -360,95 +370,49 @@ const DetailView = ({ selectedTour }) => {
                           Day {item.day}
                         </div>
                         <div className="flex-1">
-                          <h3 className={`text-xl font-serif mb-2 ${activeDay === idx ? 'text-white' : theme.text}`}>{item.location}</h3>
-                          <p className={`text-sm leading-relaxed ${activeDay === idx ? 'text-stone-100' : theme.textMuted}`}>{item.description}</p>
+                          <h3 className={`text-xl font-serif mb-2 ${activeDay === idx ? 'text-white' : theme.text}`}>{item.city?.name}</h3>
+                          <p className={`text-sm leading-relaxed ${activeDay === idx ? 'text-stone-100' : theme.textMuted}`}>{item.city?.description}</p>
                         </div>
                       </div>
                       <div className="mt-4">
-                        <img src={item.image} alt={item.location} className="w-full h-48 object-cover rounded-sm" />
+                        <img src={item.city?.image} alt={item.city?.name} className="w-full h-48 object-cover rounded-sm" />
                       </div>
                     </div>
 
                     {/* City Introduction */}
                     <div className="mb-8 p-6 border border-stone-200 rounded-sm bg-white">
-                      <h4 className={`text-2xl font-serif ${theme.text} mb-4`}>{item.location}</h4>
+                      <h4 className={`text-2xl font-serif ${theme.text} mb-4`}>{item.city?.name}</h4>
                       <p className={`${theme.textMuted} leading-relaxed text-sm`}>
                         Discover world-class attractions and iconic landmarks that define this vibrant destination. From historic architecture to modern cultural hubs, experience the perfect blend of tradition and innovation. Immerse yourself in local cuisine, art galleries, and unforgettable moments that will stay with you forever.
                       </p>
                     </div>
 
-                    {/* Hotel Carousel for this city */}
-                    <div className="mb-12">
-                      <div className="relative">
-                        <div className="overflow-hidden">
-                          <div 
-                            className="flex gap-6 transition-transform duration-500 ease-out px-12"
-                            style={{
-                              transform: `translateX(-${hotelCarouselIdx * (100 / 3)}%)`
-                            }}
-                          >
-                            {tour.itinerary.map((hotelItem, hIdx) => (
-                              <div key={hIdx} className="flex-shrink-0 w-1/3">
-                                <div className="border border-stone-200 rounded-sm overflow-hidden bg-white hover:shadow-lg transition-shadow h-96 flex flex-col">
-                                  {/* Image - 3/4 of card */}
-                                  <div className="h-72 overflow-hidden bg-stone-200">
-                                    <img 
-                                      src={hotelItem.image}
-                                      alt={hotelItem.hotel.name}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  </div>
-                                  {/* Text - 1/4 of card */}
-                                  <div className="flex-1 p-4 flex flex-col justify-between overflow-hidden">
-                                    <div>
-                                      <p className="text-xs uppercase tracking-widest text-amber-600 font-semibold mb-1">Hotel</p>
-                                      <h4 className={`text-sm font-serif ${theme.text} mb-1 line-clamp-2`}>{hotelItem.hotel.name}</h4>
-                                      <p className="text-xs text-stone-500">{hotelItem.hotel.city}</p>
-                                    </div>
-                                    <p className={`text-xs ${theme.textMuted} leading-relaxed line-clamp-2`}>{hotelItem.hotel.description}</p>
-                                  </div>
-                                </div>
+                    {/* Hotel Card for this city */}
+                    {item.hotel && (
+                      <div className="mb-12">
+                        <div className="border border-stone-200 rounded-sm overflow-hidden bg-white hover:shadow-lg transition-shadow">
+                          <div className="flex flex-col md:flex-row">
+                            {/* Image - Left side */}
+                            <div className="md:w-1/2 h-64 md:h-auto overflow-hidden bg-stone-200">
+                              <img 
+                                src={item.city?.image}
+                                alt={item.hotel.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            {/* Text - Right side */}
+                            <div className="md:w-1/2 p-8 flex flex-col justify-between">
+                              <div>
+                                <p className="text-xs uppercase tracking-widest text-amber-600 font-semibold mb-3">Hotel</p>
+                                <h4 className={`text-2xl font-serif ${theme.text} mb-2`}>{item.hotel.name}</h4>
+                                <p className="text-sm text-stone-500 mb-4">{item.city?.name}</p>
+                                <p className={`${theme.textMuted} leading-relaxed`}>{item.hotel.description}</p>
                               </div>
-                            ))}
+                            </div>
                           </div>
                         </div>
-
-                        {/* Hotel Carousel Controls */}
-                        {Math.ceil(tour.itinerary.length / 3) > 1 && (
-                          <>
-                            <button
-                              onClick={() => setHotelCarouselIdx(Math.max(0, hotelCarouselIdx - 1))}
-                              disabled={hotelCarouselIdx === 0}
-                              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-stone-900 hover:bg-stone-800 disabled:bg-stone-300 p-2 rounded-full transition-colors text-white"
-                            >
-                              <ChevronLeft className="w-5 h-5" />
-                            </button>
-                            <button
-                              onClick={() => setHotelCarouselIdx(Math.min(Math.ceil(tour.itinerary.length / 3) - 1, hotelCarouselIdx + 1))}
-                              disabled={hotelCarouselIdx >= Math.ceil(tour.itinerary.length / 3) - 1}
-                              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-stone-900 hover:bg-stone-800 disabled:bg-stone-300 p-2 rounded-full transition-colors text-white"
-                            >
-                              <ChevronRight className="w-5 h-5" />
-                            </button>
-                          </>
-                        )}
                       </div>
-
-                      {/* Hotel Carousel Indicators */}
-                      {Math.ceil(tour.itinerary.length / 3) > 1 && (
-                        <div className="flex justify-center gap-2 mt-6">
-                          {Array.from({ length: Math.ceil(tour.itinerary.length / 3) }).map((_, pIdx) => (
-                            <button
-                              key={pIdx}
-                              onClick={() => setHotelCarouselIdx(pIdx)}
-                              className={`w-2 h-2 rounded-full transition-all ${
-                                pIdx === hotelCarouselIdx ? 'bg-stone-900 w-8' : 'bg-stone-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -484,35 +448,37 @@ const DetailView = ({ selectedTour }) => {
       </div>
 
       {/* Booking Policy */}
-      <div className="bg-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <h2 className={`text-2xl md:text-3xl font-serif mb-12 ${theme.text}`}>Booking Policy</h2>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h3 className={`text-xl font-serif ${theme.text} mb-6`}>Cancellation Policy</h3>
-              <div className="space-y-4">
-                {tour.bookingPolicy.cancellation.map((policy, idx) => (
-                  <div key={idx} className="border-l-4 border-stone-900 pl-4">
-                    <p className={`text-sm font-semibold ${theme.text} mb-1`}>{policy.days}</p>
-                    <p className={`text-sm ${theme.textMuted}`}>{policy.refund}</p>
-                  </div>
-                ))}
+      {tour.bookingPolicy && (
+        <div className="bg-white py-16 md:py-20">
+          <div className="max-w-7xl mx-auto px-6 md:px-16">
+            <h2 className={`text-2xl md:text-3xl font-serif mb-12 ${theme.text}`}>Booking Policy</h2>
+            <div className="grid md:grid-cols-2 gap-12">
+              <div>
+                <h3 className={`text-xl font-serif ${theme.text} mb-6`}>Cancellation Policy</h3>
+                <div className="space-y-4">
+                  {tour.bookingPolicy.cancellation.map((policy, idx) => (
+                    <div key={idx} className="border-l-4 border-stone-900 pl-4">
+                      <p className={`text-sm font-semibold ${theme.text} mb-1`}>{policy.days}</p>
+                      <p className={`text-sm ${theme.textMuted}`}>{policy.refund}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div>
-              <h3 className={`text-xl font-serif ${theme.text} mb-6`}>Payment Methods</h3>
-              <div className="space-y-4">
-                {tour.bookingPolicy.payment.map((payment, idx) => (
-                  <div key={idx} className="border-l-4 border-stone-900 pl-4">
-                    <p className={`text-sm font-semibold ${theme.text} mb-1`}>{payment.method}</p>
-                    <p className={`text-sm ${theme.textMuted}`}>{payment.description}</p>
-                  </div>
-                ))}
+              <div>
+                <h3 className={`text-xl font-serif ${theme.text} mb-6`}>Payment Methods</h3>
+                <div className="space-y-4">
+                  {tour.bookingPolicy.payment.map((payment, idx) => (
+                    <div key={idx} className="border-l-4 border-stone-900 pl-4">
+                      <p className={`text-sm font-semibold ${theme.text} mb-1`}>{payment.method}</p>
+                      <p className={`text-sm ${theme.textMuted}`}>{payment.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="h-40" />
 
