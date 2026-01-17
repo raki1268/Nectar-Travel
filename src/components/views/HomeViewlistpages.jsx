@@ -1,3 +1,7 @@
+// ============================================
+// destination & season 中间导览页
+// ============================================
+
 import React, { useState, useRef } from 'react';
 import { ArrowRight, List, LayoutGrid, Download, ChevronLeft, ChevronRight, Shield } from 'lucide-react';
 import categoriesData from '../../data/categories.json';

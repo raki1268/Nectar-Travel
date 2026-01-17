@@ -1,3 +1,7 @@
+// ============================================
+// 旅游产品详情页（重要）
+// ============================================
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getTourDetails } from '../../data/tourDetailsMap';

@@ -1,3 +1,7 @@
+// ============================================
+// 首页
+// ============================================
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Anchor, Palette, Ticket, Users, Tent } from 'lucide-react';
 import HoverImageCard from '../common/HoverImageCard';

@@ -1,3 +1,7 @@
+// ============================================
+// 售票展示页
+// ============================================
+
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ChevronLeft, 
