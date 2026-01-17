@@ -10,7 +10,7 @@ export const guides = {
     specialties: ["Canada", "North America"],
     language: ["English", "Mandarin"]
   },
-  qiWei: {
+  "qi-wei": {
     id: "qi-wei",
     name: "Qi Wei",
     avatar: "images/guides/qi-wei.jpg",

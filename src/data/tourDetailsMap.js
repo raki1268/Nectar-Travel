@@ -167,12 +167,21 @@ export function getTourDetails(tourId) {
     return null;
   }
 
+  // 调试日志
+  console.log(`=== getTourDetails for tour ${tourId} ===`);
+  console.log('Available hotel keys:', Object.keys(hotels));
+  
   // 构建完整的itinerary，包含城市和酒店详情
-  const itineraryWithDetails = tour.itinerary.map(item => ({
-    day: item.day,
-    city: cities[item.cityId],
-    hotel: hotels[item.hotelId]
-  }));
+  const itineraryWithDetails = tour.itinerary.map(item => {
+    const hotelData = hotels[item.hotelId];
+    console.log(`Looking for hotel: ${item.hotelId}`, hotelData ? '✓ Found' : '✗ NOT FOUND');
+    
+    return {
+      day: item.day,
+      city: cities[item.cityId],
+      hotel: hotelData
+    };
+  });
 
   // 构建完整的destinations，包含城市详情
   const destinationsWithDetails = tour.destinations.map(dest => ({

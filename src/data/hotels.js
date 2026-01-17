@@ -1,68 +1,77 @@
 // ============================================
 // 2. hotels.js - 酒店管理（可独立管理60+个）
 // ============================================
+
+// ============================================
+// Canada
+// ============================================
 export const hotels = {
-  distilleryLofts: {
+  "distillery-lofts": {
     id: "distillery-lofts",
     cityId: "toronto",
     name: "The Distillery Lofts Hotel",
     description: "Luxury boutique hotel in Victorian-era historic district with modern amenities and charm."
   },
-  princeOfWales: {
+  "prince-of-wales": {
     id: "prince-of-wales",
-    cityId: "niagara-falls",
+    cityId: "niagaraFalls",
     name: "Prince of Wales Hotel",
     description: "Historic luxury hotel overlooking the Niagara River with elegant Victorian architecture."
   },
-  fairmontChateauLaurier: {
+  "fairmont-chateau-laurier": {
     id: "fairmont-chateau-laurier",
     cityId: "ottawa",
     name: "Fairmont Château Laurier",
     description: "Grand historic hotel in downtown near all major attractions."
   },
-  ritzCarltonMontreal: {
+  "ritz-carlton-montreal": {
     id: "ritz-carlton-montreal",
     cityId: "montreal",
     name: "Ritz-Carlton Montreal",
     description: "Prestigious luxury hotel with sophisticated design and world-class service."
   },
-  chateauFrontenac: {
+  "chateau-frontenac": {
     id: "chateau-frontenac",
-    cityId: "quebec-city",
+    cityId: "quebecCity",
     name: "Château Frontenac",
     description: "Iconic luxury castle hotel overlooking the St. Lawrence River with timeless elegance."
   },
-  grandHotelTremezzo: {
+
+  // ============================================
+  // Italy
+  // ============================================
+
+  "grand-hotel-tremezzo": {
     id: "grand-hotel-tremezzo",
     cityId: "milan",
     name: "Grand Hotel Tremezzo",
     description: "An iconic art nouveau masterpiece offering unparalleled views of Bellagio and the lake."
   },
-  cristallo: {
+  "cristallo": {
     id: "cristallo",
     cityId: "dolomites",
     name: "Cristallo, a Luxury Collection Resort",
     description: "Historic mountain resort offering refined elegance in the heart of the Dolomites."
   },
-  belmondHotelCipriani: {
+  "belmond-hotel-cipriani": {
     id: "belmond-hotel-cipriani",
     cityId: "venice",
     name: "Belmond Hotel Cipriani",
     description: "Legendary luxury on Giudecca Island with spectacular views of the Venetian lagoon."
   },
-  fourSeasonsFirenze: {
+  "four-seasons-firenze": {
     id: "four-seasons-firenze",
     cityId: "florence",
     name: "Four Seasons Hotel Firenze",
     description: "A Renaissance palace featuring an enchanting private botanical garden."
   },
-  leSirenuse: {
+  "le-sirenuse": {
     id: "le-sirenuse",
     cityId: "amalfiCoast",
     name: "Le Sirenuse",
     description: "A luxury boutique hotel offering the most famous views of Positano's colorful houses."
   },
-  hotelHasslerRoma: {
+  "hotel-hassler-roma": {
     id: "hotel-hassler-roma",
     cityId: "rome",
     name: "Hotel Hassler Roma",

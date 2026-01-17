@@ -9,7 +9,7 @@ export const cities = {
     description: "Canada's largest city with iconic landmarks and vibrant neighborhoods."
   },
   niagaraFalls: {
-    id: "niagara-falls",
+    id: "niagaraFalls",
     name: "Niagara Falls",
     image: "images/cities/niagara-falls.jpg",
     description: "Witness the spectacular power of Niagara Falls and explore wine country."
@@ -27,7 +27,7 @@ export const cities = {
     description: "Immerse in artistic culture, gastronomy, and historic Old Town."
   },
   quebecCity: {
-    id: "quebec-city",
+    id: "quebecCity",
     name: "Quebec City",
     image: "images/cities/quebec-city.jpg",
     description: "North America's only walled city with charm and historic character."
@@ -54,10 +54,10 @@ export const cities = {
     id: "florence",
     name: "Tuscany & Florence",
     image: "images/tours/id2/florence.jpg",
-    description: "Renaissance art and rolling hills with vineyards and cypress roads."
+    description: "Immerse in the Renaissance art of Florence and the rolling hills, vineyards, and cypress roads of Tuscany."
   },
   amalfiCoast: {
-    id: "amalfi-coast",
+    id: "amalfiCoast",
     name: "Amalfi Coast",
     image: "images/tours/id2/amalfi-coast.jpg",
     description: "Breathtaking cliffside views and sparkling Mediterranean waters."

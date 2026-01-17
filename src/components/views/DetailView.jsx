@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getTourDetails } from '../../data/tourDetailsMap';
+import { hotels } from '../../data/hotels';
 import { themeConfig } from '../../config/themeConfig';
 
 const DetailView = ({ selectedTour }) => {
@@ -127,7 +128,7 @@ const DetailView = ({ selectedTour }) => {
         console.error('Map initialization error:', error);
       }
     }, 100);
-  }, [tour.itinerary]);
+  }, [tour.itinerary, activeDay]);
 
   useEffect(() => {
     if (mapInstanceRef.current) {
@@ -387,32 +388,105 @@ const DetailView = ({ selectedTour }) => {
                       </p>
                     </div>
 
-                    {/* Hotel Card for this city */}
-                    {item.hotel && (
-                      <div className="mb-12">
-                        <div className="border border-stone-200 rounded-sm overflow-hidden bg-white hover:shadow-lg transition-shadow">
-                          <div className="flex flex-col md:flex-row">
-                            {/* Image - Left side */}
-                            <div className="md:w-1/2 h-64 md:h-auto overflow-hidden bg-stone-200">
-                              <img 
-                                src={item.city?.image}
-                                alt={item.hotel.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            {/* Text - Right side */}
-                            <div className="md:w-1/2 p-8 flex flex-col justify-between">
-                              <div>
-                                <p className="text-xs uppercase tracking-widest text-amber-600 font-semibold mb-3">Hotel</p>
-                                <h4 className={`text-2xl font-serif ${theme.text} mb-2`}>{item.hotel.name}</h4>
-                                <p className="text-sm text-stone-500 mb-4">{item.city?.name}</p>
-                                <p className={`${theme.textMuted} leading-relaxed`}>{item.hotel.description}</p>
+                    {/* Hotel Recommendation Section - 2 column carousel */}
+                    {item.hotel && (() => {
+                      // 获取该城市的所有酒店
+                      const cityHotels = Object.values(hotels)
+                        .filter(h => h.cityId === item.city?.id);
+
+                      if (cityHotels.length === 0) return null;
+
+                      // 计算总页数（每页显示2个）
+                      const totalPages = Math.ceil(cityHotels.length / 2);
+                      
+                      return (
+                        <div className="mb-12">
+                          <h4 className={`text-2xl md:text-3xl font-serif ${theme.text} mb-8`}>Where you could stay</h4>
+                          
+                          {/* Hotel Cards - 2 columns */}
+                          <div className="relative">
+                            <div className="overflow-hidden">
+                              <div 
+                                className="flex gap-8 transition-transform duration-500 ease-out"
+                                style={{
+                                  transform: `translateX(-${hotelCarouselIdx * 100}%)`
+                                }}
+                              >
+                                {/* Generate pairs of hotels */}
+                                {Array.from({ length: totalPages }).map((_, pageIdx) => (
+                                  <div key={pageIdx} className="flex-shrink-0 w-full flex gap-8">
+                                    {[0, 1].map((offset) => {
+                                      const hotelIdx = pageIdx * 2 + offset;
+                                      const hotel = cityHotels[hotelIdx];
+                                      
+                                      return (
+                                        <div key={hotelIdx} className="flex-1">
+                                          {hotel ? (
+                                            <div className="bg-white rounded-sm overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
+                                              {/* Image */}
+                                              <div className="h-64 overflow-hidden bg-stone-200">
+                                                <img 
+                                                  src={item.city?.image}
+                                                  alt={hotel.name}
+                                                  className="w-full h-full object-cover"
+                                                />
+                                              </div>
+                                              {/* Text Content */}
+                                              <div className="p-6 flex flex-col flex-1">
+                                                <p className={`text-sm font-serif ${theme.text} opacity-60 mb-2`}>{item.city?.name}</p>
+                                                <h5 className={`text-2xl font-serif ${theme.text} mb-4`}>{hotel.name}</h5>
+                                                <p className={`${theme.textMuted} leading-relaxed text-sm flex-1`}>{hotel.description}</p>
+                                              </div>
+                                            </div>
+                                          ) : (
+                                            <div /> // Empty placeholder
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                ))}
                               </div>
                             </div>
+
+                            {/* Navigation Buttons */}
+                            {totalPages > 1 && (
+                              <>
+                                <button
+                                  onClick={() => setHotelCarouselIdx(Math.max(0, hotelCarouselIdx - 1))}
+                                  disabled={hotelCarouselIdx === 0}
+                                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-20 z-20 bg-white border border-stone-300 hover:bg-stone-50 disabled:opacity-30 disabled:cursor-not-allowed p-3 rounded-full transition-all"
+                                >
+                                  <ChevronLeft className="w-6 h-6 text-stone-600" />
+                                </button>
+                                <button
+                                  onClick={() => setHotelCarouselIdx(Math.min(totalPages - 1, hotelCarouselIdx + 1))}
+                                  disabled={hotelCarouselIdx >= totalPages - 1}
+                                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-20 z-20 bg-white border border-stone-300 hover:bg-stone-50 disabled:opacity-30 disabled:cursor-not-allowed p-3 rounded-full transition-all"
+                                >
+                                  <ChevronRight className="w-6 h-6 text-stone-600" />
+                                </button>
+                              </>
+                            )}
                           </div>
+
+                          {/* Indicators */}
+                          {totalPages > 1 && (
+                            <div className="flex justify-center gap-2 mt-8">
+                              {Array.from({ length: totalPages }).map((_, idx) => (
+                                <button
+                                  key={idx}
+                                  onClick={() => setHotelCarouselIdx(idx)}
+                                  className={`w-2 h-2 rounded-full transition-all ${
+                                    idx === hotelCarouselIdx ? 'bg-stone-900 w-8' : 'bg-stone-300'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    )}
+                      );
+                    })()}
                   </div>
                 ))}
               </div>
