@@ -24,6 +24,7 @@ import DetailView from './components/views/DetailView';
 import AboutView from './components/views/AboutView';
 import CategoryLandingView from './components/views/CategoryLandingView';
 import ProductGridView from './components/views/ProductGridView';
+import StayView from './components/views/StayView';
 
 const App = () => {
   // State Management
@@ -212,6 +213,9 @@ const App = () => {
           />
         );
       
+      case 'stay':
+        return <StayView />; 
+
       case 'about':
         return (
           <AboutView theme={theme} />

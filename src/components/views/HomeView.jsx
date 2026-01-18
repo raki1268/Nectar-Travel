@@ -3,7 +3,7 @@
 // ============================================
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Anchor, Palette, Ticket, Users, Tent } from 'lucide-react';
+import { Anchor, MapPin, Ticket, Calendar, Hotel, ArrowRight } from 'lucide-react';
 import HoverImageCard from '../common/HoverImageCard';
 import contentData from '../../data/content.json';
 import toursData from '../../data/tours.json';
@@ -42,12 +42,12 @@ const HomeView = ({ theme, onNavigate, onTourSelect }) => {
     }
   };
 
-  const quickCategories = [
+const quickCategories = [
     { Icon: Anchor, label: 'Cruise', action: () => onNavigate('cruise') },
-    { Icon: Palette, label: 'Art', action: () => onNavigate('list', 'destination') },
+    { Icon: MapPin, label: 'Destination', action: () => onNavigate('list', 'destination') },
     { Icon: Ticket, label: 'Ticket', action: () => onNavigate('ticket') },
-    { Icon: Users, label: 'Private', action: () => onNavigate('list', 'destination') },
-    { Icon: Tent, label: 'Glamping', action: () => onNavigate('list', 'destination') }
+    { Icon: Calendar, label: 'Season', action: () => onNavigate('list', 'season') },
+    { Icon: Hotel, label: 'Stay', action: () => onNavigate('stay') }
   ];
 
   return (
