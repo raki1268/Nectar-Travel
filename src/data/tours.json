@@ -2,27 +2,40 @@
   "tours": [
     {
       "id": 1,
-      "title": "Canada Aurora Expedition",
-      "price": 6999,
-      "currency": "CNY",
-      "image": "images/tours/canada-aurora.jpg",
-      "days": 7,
+      "title": "Classic tour of Eastern Canada",
+      "price": 4500,
+      "currency": "CAD",
+      "image": "images/tours/id1/quebec.jpg",
+      "days": 14,
       "category": "Canada",
       "season": "Winter",
-      "description": "Witness the celestial dance of the Northern Lights from our exclusive glass-domed lodges.",
+      "description": "The best travel route in Eastern Canada, ensuring you don't miss any classic sights.",
       "status": "active",
       "featured": true
     },
     {
       "id": 2,
       "title": "First Encounter: Italian Classics",
-      "price": 20000,
-      "currency": "CNY",
+      "price": 4000,
+      "currency": "CAD",
       "image": "images/tours/id2/hero1.jpg",
       "days": 15,
       "category": "Europe",
       "season": "Spring;Summer;Autumn",
       "description": "A tour around Italy is perfect for first-time visitors or those who want to see all of Italy's classic sights in one trip.",
+      "status": "active",
+      "featured": true
+    },
+    {
+      "id": 3,
+      "title": "Italian Culinary Journey: Classics and Innovation",
+      "price": 5999,
+      "currency": "CAD",
+      "image": "images/tours/id3/italyfoodtour.jpg",
+      "days": 8,
+      "category": "Europe",
+      "season": "Spring;Summer;Autumn;winter",
+      "description": "Guided by Michelin regulars, you'll experience the most delicious classic and local Italian cuisine in one go.",
       "status": "active",
       "featured": true
     }

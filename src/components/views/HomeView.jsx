@@ -1,15 +1,14 @@
-// ============================================
-// 首页
-// ============================================
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Anchor, MapPin, Ticket, Calendar, Hotel, ArrowRight } from 'lucide-react';
 import HoverImageCard from '../common/HoverImageCard';
 import contentData from '../../data/content.json';
 import toursData from '../../data/tours.json';
+import { continents } from '../../data/continents';
 
 const HomeView = ({ theme, onNavigate, onTourSelect }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [hoveredContinent, setHoveredContinent] = useState(null);
+  const [isHoveredCruise, setIsHoveredCruise] = useState(false);
   const scrollContainerRef = useRef(null);
   
   // 安全地获取首页内容
@@ -42,7 +41,13 @@ const HomeView = ({ theme, onNavigate, onTourSelect }) => {
     }
   };
 
-const quickCategories = [
+  const handleContinentClick = (continent) => {
+    if (continent.status === 'active') {
+      onNavigate('list', continent.id);
+    }
+  };
+
+  const quickCategories = [
     { Icon: Anchor, label: 'Cruise', action: () => onNavigate('cruise') },
     { Icon: MapPin, label: 'Destination', action: () => onNavigate('list', 'destination') },
     { Icon: Ticket, label: 'Ticket', action: () => onNavigate('ticket') },
@@ -120,7 +125,7 @@ const quickCategories = [
           ))}
         </div>
 
-        {/* Curator's Pick Section - 修复并显示图框 */}
+        {/* Curator's Pick Section */}
         {curatorsPick.title && (
           <div className="mb-20">
             <div className="flex justify-between items-end mb-8">
@@ -144,65 +149,183 @@ const quickCategories = [
               </div>
             </div>
             
-            {/* 滚动容器：flex布局，禁止换行，允许横向滚动 */}
-             <div 
-               ref={scrollContainerRef} 
-               className="flex gap-4 overflow-x-auto pb-10 scrollbar-hide scroll-smooth"
-             >
-               {featuredTours.map((tour) => (
-                  <div 
-                   key={tour.id} 
-                   /* w-[25vw] 表示卡片占据视口宽度的 25%
-                      min-w-[220px] 保证在小屏幕上不会缩得太小
-                   */
-                   className="min-w-[220px] w-[26vw] md:min-w-[250px] md:w-[26vw] flex-shrink-0"
-                  >
-                   <HoverImageCard 
-                     src={tour.image} 
-                     title={tour.title} 
-                     price={tour.price}
-                     currency={tour.currency}
-                     theme={theme}
-                     onClick={() => onTourSelect(tour)}
-                   />
+            <div 
+              ref={scrollContainerRef} 
+              className="flex gap-4 overflow-x-auto pb-10 scrollbar-hide scroll-smooth"
+            >
+              {featuredTours.map((tour) => (
+                <div 
+                  key={tour.id} 
+                  className="min-w-[220px] w-[26vw] md:min-w-[250px] md:w-[26vw] flex-shrink-0"
+                >
+                  <HoverImageCard 
+                    src={tour.image} 
+                    title={tour.title} 
+                    price={tour.price}
+                    currency={tour.currency}
+                    theme={theme}
+                    onClick={() => onTourSelect(tour)}
+                  />
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* About Section */}
-<section className="py-24 px-6 md:px-12 bg-[#F9F9F9]">
-  <div className="max-w-4xl mx-auto text-center">
-    {/* 使用变量 aboutSection.est */}
-    <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-8">
-      {aboutSection?.est || 'Est. 2024'}
-    </p>
-    
-    {/* 使用变量 aboutSection.title */}
-    <h2 className="text-4xl md:text-5xl font-serif italic text-gray-900 mb-10">
-      {aboutSection?.title || 'About Nectar Travel'}
-    </h2>
-    
-    <div className="relative inline-block">
-      <span className="absolute -left-8 -top-4 text-4xl text-gray-200 font-serif">“</span>
-      {/* 使用变量 aboutSection.quote */}
-      <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light italic">
-        {aboutSection?.quote || 'We do not sell tickets; we grant keys to the hidden doors of the world.'}
-      </p>
-      <span className="absolute -right-8 -bottom-4 text-4xl text-gray-200 font-serif">”</span>
-    </div>
+        {/* Pick Your Next Trip Section */}
+        <div className="mb-20 py-16">
+          <div className="mb-16 flex justify-center">
+            <div className="text-center">
+              <h2 className={`text-2xl font-serif italic ${theme.text}`}>
+                Your Next Trip
+              </h2>
+              <p className={`text-[10px] uppercase tracking-widest mt-2 ${theme.textMuted}`}>
+                Explore destinations across the globe
+              </p>
+            </div>
+          </div>
 
-    {/* Logo 部分保持不变 */}
-    <div className="mt-16 flex justify-center">
-      <img 
-        src="images/hero/nectartravel.jpg" 
-        alt="Nectar Travel Seal" 
-        className="w-32 h-auto opacity-70 mix-blend-multiply grayscale hover:opacity-100 transition-opacity duration-700"
-      />
-    </div>
-  </div>
-</section>
+          {/* 横向网格容器 */}
+          <div className="relative w-full h-64 flex justify-center px-8">
+            {/* 背景横线 - 两端带实心圆点 */}
+            <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-900 transform -translate-y-1/2">
+              {/* 左端实心圆点 */}
+              <div className="absolute -left-4 top-1/2 w-3 h-3 bg-gray-900 rounded-full transform -translate-y-1/2"></div>
+              {/* 右端实心圆点 */}
+              <div className="absolute -right-4 top-1/2 w-3 h-3 bg-gray-900 rounded-full transform -translate-y-1/2"></div>
+            </div>
+
+            {/* 大洲点容器 */}
+            <div className="flex justify-between items-center h-full relative z-10 w-full">
+              {continents.map((continent, idx) => (
+                <div
+                  key={continent.id}
+                  className="flex flex-col items-center cursor-pointer group relative flex-1"
+                  onMouseEnter={() => setHoveredContinent(continent.id)}
+                  onMouseLeave={() => setHoveredContinent(null)}
+                  onClick={() => handleContinentClick(continent)}
+                >
+                  {/* 活跃的大洲（亚洲、北美洲、欧洲）- 显示在上方 */}
+                  {continent.status === 'active' && (
+                    <div className={`absolute bottom-16 text-center transition-all duration-300 ${
+                      hoveredContinent === continent.id ? 'scale-110' : 'scale-100'
+                    }`}>
+                      <p className={`text-l font-bold leading-tight ${
+                        hoveredContinent === continent.id ? 'text-gray-900' : 'text-gray-700'
+                      }`}>
+                        {continent.label}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* 竖线 */}
+                  <div
+                    className={`absolute w-1 transition-all duration-300 ${
+                      continent.status === 'active'
+                        ? (hoveredContinent === continent.id ? 'h-10 bg-black bottom-full' : 'h-14 bg-black bottom-full')
+                        : (hoveredContinent === continent.id ? 'h-10 bg-gray-400 top-0' : 'h-12 bg-gray-300 top-0')
+                    }`}
+                  ></div>
+
+                  {/* 即将推出的大洲 - 显示在竖线上端 */}
+                  {continent.status === 'coming-soon' && (
+                    <div className={`absolute top-14 text-center transition-all duration-300 ${
+                      hoveredContinent === continent.id ? 'scale-110' : 'scale-100'
+                    }`}>
+                      <p className={`text-sm leading-snug opacity-60 mb-2 ${
+                        hoveredContinent === continent.id ? 'text-gray-900' : 'text-gray-600'
+                      }`}>
+                        {continent.label}
+                      </p>
+                      <p className="text-[9px] uppercase tracking-widest text-gray-400">
+                        Coming Soon
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 底部描述 */}
+          <div className="mt-12 text-center">
+            <p className={`text-xs ${theme.textMuted}`}>
+              Hover over each continent to explore available routes
+            </p>
+          </div>
+        </div>
+
+        {/* Cruise Banner Section */}
+        <div className="mb-20">
+          <div 
+            className="relative h-80 rounded-lg overflow-hidden cursor-pointer group"
+            onMouseEnter={() => setIsHoveredCruise(true)}
+            onMouseLeave={() => setIsHoveredCruise(false)}
+            onClick={() => onNavigate('cruise')}
+          >
+            {/* 背景图片 */}
+            <img 
+              src="images/hero/alaska-princess-cruise.jpg" 
+              alt="Explore Cruise" 
+              className={`w-full h-full object-cover transition-transform duration-500 ${
+                isHoveredCruise ? 'scale-105' : 'scale-100'
+              }`}
+            />
+            
+            {/* 深色叠加层 */}
+            <div className={`absolute inset-0 bg-black transition-opacity duration-500 ${
+              isHoveredCruise ? 'opacity-30' : 'opacity-40'
+            }`}></div>
+
+            {/* 左上角文本 */}
+            <div className="absolute top-8 left-8 z-10">
+              <h3 className={`text-white text-2xl md:text-3xl font-serif italic transition-all duration-500 ${
+                isHoveredCruise ? 'translate-x-2 text-white' : 'text-white/90'
+              }`}>
+                Explore Cruise
+              </h3>
+              <div className={`h-1 bg-white mt-3 transition-all duration-500 ${
+                isHoveredCruise ? 'w-24' : 'w-16'
+              }`}></div>
+            </div>
+
+            {/* 右下角箭头提示 */}
+            <div className={`absolute bottom-6 right-6 text-white text-sm opacity-0 transition-opacity duration-500 ${
+              isHoveredCruise ? 'opacity-100' : 'opacity-0'
+            }`}>
+              <p className="uppercase tracking-widest text-xs">Discover More →</p>
+            </div>
+          </div>
+        </div>
+
+        {/* About Section */}
+        <section className="py-24 px-6 md:px-12 bg-[#F9F9F9]">
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-8">
+              {aboutSection?.est || 'Est. 2024'}
+            </p>
+            
+            <h2 className="text-4xl md:text-5xl font-serif italic text-gray-900 mb-10">
+              {aboutSection?.title || 'About Nectar Travel'}
+            </h2>
+            
+            <div className="relative inline-block">
+              <span className="absolute -left-8 -top-4 text-4xl text-gray-200 font-serif">"</span>
+              <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light italic">
+                {aboutSection?.quote || 'We do not sell tickets; we grant keys to the hidden doors of the world.'}
+              </p>
+              <span className="absolute -right-8 -bottom-4 text-4xl text-gray-200 font-serif">"</span>
+            </div>
+
+            <div className="mt-16 flex justify-center">
+              <img 
+                src="images/hero/nectartravel.jpg" 
+                alt="Nectar Travel Seal" 
+                className="w-32 h-auto opacity-70 mix-blend-multiply grayscale hover:opacity-100 transition-opacity duration-700"
+              />
+            </div>
+          </div>
+        </section>
 
       </div>
     </div>
